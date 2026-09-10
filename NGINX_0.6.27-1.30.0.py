@@ -44,4 +44,3 @@ HEAP_BASE = re.search(rb'^([0-9a-f]+)-', list_libc_base_addr).group(1)
 HEAP_BASE = f"{HEAP_BASE.decode()}"
 print("HEAP BASE:", HEAP_BASE)
 print(LIBC_BASE, SYSTEM_ADDR, HEAP_BASE)
-
