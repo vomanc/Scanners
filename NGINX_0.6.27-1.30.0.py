@@ -10,7 +10,7 @@ import re
 # Disable the ASLR
 subprocess.check_output("echo 0 | tee /proc/sys/kernel/randomize_va_space", shell=True)
 # Check the ASLR status
-status_aslr = subprocess.check_output("pgrep -a nginx", shell=False)
+status_aslr = subprocess.check_output("cat /proc/sys/kernel/randomize_va_space", shell=False)
 print("ASLR status:", status_aslr)
 
 # search a process of worker
